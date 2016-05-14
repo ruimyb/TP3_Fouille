@@ -4,8 +4,7 @@
 
 int main(){
 
-
-
+    printf("LOURD");
     listDoc * L = getInfos("test.txt");
     afficherAll(L);
     return 0; 

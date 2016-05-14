@@ -10,7 +10,7 @@
 
 
 listDoc * getInfos(char * FileName){
-
+    printf("plop2");
     FILE* myFile = NULL;
     myFile = fopen(FileName, "r");
     listDoc * L = malloc(sizeof(listDoc));
@@ -18,20 +18,18 @@ listDoc * getInfos(char * FileName){
     Document * d = malloc(sizeof(Document));
     d->suiv = NULL;
     d->categorie = -1;
-    Word * w = malloc(sizeof(Word));
+    //Word * w = malloc(sizeof(Word));
     if (myFile != NULL)
     {
         //On peut lire et écrire dans le fichier
 
-        printf("plop");
-
-
-        while(1){
+        printf("plop2");
+        while(fgetc(myFile) != EOF){
             printf("plop2");
 
             fseek(myFile, -1,SEEK_CUR);
             fscanf(myFile,"%i", &(d->categorie));
-            char a = getchar();
+            char a = fgetc(myFile);
             while(a != '\n'){
                 int value;
                 int nbrAppearance;
