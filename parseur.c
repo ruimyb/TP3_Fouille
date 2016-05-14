@@ -10,7 +10,7 @@
 
 
 listDoc * getInfos(char * FileName){
-    printf("plop2");
+    printf("plop1\n");
     FILE* myFile = NULL;
     myFile = fopen(FileName, "r");
     listDoc * L = malloc(sizeof(listDoc));
@@ -23,14 +23,18 @@ listDoc * getInfos(char * FileName){
     {
         //On peut lire et écrire dans le fichier
 
-        printf("plop2");
-        while(fgetc(myFile) != EOF){
-            printf("plop2");
+        printf("plop2\n");
+        int fin = getc(myFile);
+        while(fin != EOF){
+            printf("plop3\n");
 
             fseek(myFile, -1,SEEK_CUR);
             fscanf(myFile,"%i", &(d->categorie));
-            char a = fgetc(myFile);
-            while(a != '\n'){
+
+            int a = getc(myFile);
+
+            while(a != '\n' && a!= EOF){
+                fseek(myFile, -1,SEEK_CUR);
                 int value;
                 int nbrAppearance;
                 fscanf(myFile,"%i:%i",&value,&nbrAppearance);
@@ -38,12 +42,12 @@ listDoc * getInfos(char * FileName){
                     L->maxIndice = value;
                 }
                 ajouterMot(d,value,nbrAppearance);
+                a = getc(myFile);
             }
             ajouterDoc(L,d->categorie,d->listWord);
+            fin = getc(myFile);
         }
-        printf("Sortie de boucle");
         fclose(myFile);
-        //fin = getchar();
     }
     else
     {
@@ -75,7 +79,7 @@ void afficherAll(listDoc * L){
     int compt = 1;
     Document * courant = L->doc;
     printf("La taille du vocabulaire est : %i \n", L->maxIndice);
-    while(L->doc != NULL){
+    while(courant != NULL){
         printf("Affichage du document %i dont la catégorie est : %i \n", compt, courant->categorie);
         compt++;
         afficherDoc(courant);
@@ -89,7 +93,7 @@ void afficherDoc(Document * D){
         printf(" ");
         courant = courant->suiv;
     }
-};
+}
 void afficherMot(Word * w){
     printf("%i:%i", w->value,w->nbrAppearance);
 }
