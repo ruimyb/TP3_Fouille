@@ -15,10 +15,9 @@ listDoc * getInfos(char * FileName){
     myFile = fopen(FileName, "r");
     listDoc * L = malloc(sizeof(listDoc));
     L->maxIndice = -1;
+    L->doc = NULL;
     Document * d = malloc(sizeof(Document));
-    d->suiv = NULL;
-    d->categorie = -1;
-    //Word * w = malloc(sizeof(Word));
+
     if (myFile != NULL)
     {
         //On peut lire et écrire dans le fichier
@@ -26,6 +25,9 @@ listDoc * getInfos(char * FileName){
         printf("plop2\n");
         int fin = getc(myFile);
         while(fin != EOF){
+            d->suiv = NULL;
+            d->listWord = NULL;
+            d->categorie = -1;
             printf("plop3\n");
 
             fseek(myFile, -1,SEEK_CUR);
@@ -34,15 +36,21 @@ listDoc * getInfos(char * FileName){
             int a = getc(myFile);
 
             while(a != '\n' && a!= EOF){
-                fseek(myFile, -1,SEEK_CUR);
-                int value;
-                int nbrAppearance;
+                //fseek(myFile, -1,SEEK_CUR);
+                int value = 0;
+                int nbrAppearance = 0;
                 fscanf(myFile,"%i:%i",&value,&nbrAppearance);
                 if(value > L->maxIndice){
                     L->maxIndice = value;
                 }
-                ajouterMot(d,value,nbrAppearance);
+
+
+                if (a != EOF && a != '\n') {
+                    ajouterMot(d, value, nbrAppearance);
+                }
+
                 a = getc(myFile);
+
             }
             ajouterDoc(L,d->categorie,d->listWord);
             fin = getc(myFile);
@@ -61,27 +69,51 @@ void ajouterMot(Document * d, int valeur, int nbr){
     Word  * mot = malloc(sizeof(Word));
     mot->value = valeur;
     mot->nbrAppearance = nbr;
-    mot->suiv = d->listWord;
-    d->listWord = mot;
-    //insertion en tête
+
+    //insertion en queue
+    Word *dernier = d->listWord;
+
+    if (dernier == NULL) {
+        d->listWord=mot;
+        mot->suiv = NULL;
+    } else {
+
+        while (dernier->suiv != NULL) {
+            dernier = dernier->suiv;
+        }
+        dernier->suiv = mot;
+        mot->suiv = NULL;
+    }
+
 }
 
 void ajouterDoc(listDoc * L, int categorie, Word * listWord){
     Document * doc = malloc(sizeof(Document));
     doc->categorie = categorie;
     doc->listWord = listWord;
-    doc->suiv = L->doc;
-    L->doc = doc;
-    //insertion en tête
+
+    //insertion en queue
+    Document *last = L->doc;
+
+    if (last == NULL) {
+        L->doc=doc;
+        doc->suiv = NULL;
+    } else {
+
+        while (last->suiv != NULL) {
+            last = last->suiv;
+        }
+        last->suiv = doc;
+        doc->suiv = NULL;
+    }
+
 }
 
 void afficherAll(listDoc * L){
-    int compt = 1;
     Document * courant = L->doc;
     printf("La taille du vocabulaire est : %i \n", L->maxIndice);
     while(courant != NULL){
-        printf("Affichage du document %i dont la catégorie est : %i \n", compt, courant->categorie);
-        compt++;
+        printf("Affichage du document catégorie %i \n", courant->categorie);
         afficherDoc(courant);
         courant = courant->suiv;
     }
@@ -93,6 +125,7 @@ void afficherDoc(Document * D){
         printf(" ");
         courant = courant->suiv;
     }
+    printf("\n");
 }
 void afficherMot(Word * w){
     printf("%i:%i", w->value,w->nbrAppearance);

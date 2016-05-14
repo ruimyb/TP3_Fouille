@@ -11,6 +11,7 @@ struct Word {
     int value;
     int nbrAppearance;
     Word * suiv;
+    Word *queue;
 };
 
 typedef struct Document Document;
@@ -18,6 +19,7 @@ struct Document{
     int categorie;
     Word *listWord;
     Document * suiv;
+    Document *queue;
 };
 
 typedef struct {
