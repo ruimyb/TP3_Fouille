@@ -10,13 +10,14 @@
 
 
 
+
 tabDoc* getInfos(char * FileName, int taille){
     FILE* myFile = NULL;
     myFile = fopen(FileName, "r");
     tabDoc* L = malloc(sizeof(tabDoc));
     L->maxIndice = -1;
     L -> taille = taille;
-    L ->tab = malloc(L -> taille * sizeof(Document));
+    L ->tab = malloc(L -> taille * sizeof(Document*));
     Document * d = malloc(sizeof(Document));
     int j = 0;
     if (myFile != NULL)
