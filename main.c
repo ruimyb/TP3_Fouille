@@ -10,15 +10,15 @@ int main(){
     tabDoc * L = getInfos("BaseReuters-29", 70703);
     printf("Creation oK\n");
     //afficherAll(L);
-    supprimerDoc(L);
-    printf("Suppression ok\n");
+
+    afficherQ1(L);
 
     // ======== Question 2 : Découpage de l'ensemble de données ========
     tabDoc* test = createTestSet(L);
-    afficherAll(test);
+    //afficherAll(test);
 
     tabDoc* training = createTrainingSet(L);
-    afficherAll(training);
+    //afficherAll(training);
 
     // ======== Question 3a : estimation des paramètres du modèle de Bernoulli ========
 
@@ -28,6 +28,9 @@ int main(){
     // ======== Question 4 : ========
 
     // ======== Question 5 : ========
+
+    supprimerDoc(L);
+    printf("Suppression ok\n");
 
     return 0;
 
