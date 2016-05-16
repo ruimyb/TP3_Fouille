@@ -16,7 +16,7 @@ tabDoc* getInfos(char * FileName, int taille){
     tabDoc* L = malloc(sizeof(tabDoc));
     L->maxIndice = -1;
     L -> taille = taille;
-    L ->tab = malloc(L -> taille * sizeof(Document));
+    L ->tab = malloc(L -> taille * sizeof(Document*));
     Document * d = malloc(sizeof(Document));
     int j = 0;
     if (myFile != NULL)
@@ -33,9 +33,9 @@ tabDoc* getInfos(char * FileName, int taille){
             fscanf(myFile,"%i", &(d->categorie));
 
             int a = getc(myFile);
-
-            while(a != '\n' && a!= EOF){
-                //fseek(myFile, -1,SEEK_CUR);
+            int b = getc(myFile);
+            while(b != '\n' && a == ' ' && b!= EOF){
+                fseek(myFile, -1,SEEK_CUR);
                 int value = 0;
                 int nbrAppearance = 0;
                 fscanf(myFile,"%i:%i",&value,&nbrAppearance);
@@ -43,13 +43,12 @@ tabDoc* getInfos(char * FileName, int taille){
                     L->maxIndice = value;
                 }
 
-
                 if (a != EOF && a != '\n') {
                     ajouterMot(d, value, nbrAppearance);
                 }
 
                 a = getc(myFile);
-
+                b = getc(myFile);
             }
             ajouterDoc(L,d->categorie,d->listWord,j);
             fin = getc(myFile);
