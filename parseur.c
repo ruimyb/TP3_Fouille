@@ -11,7 +11,6 @@
 
 
 tabDoc* getInfos(char * FileName, int taille){
-    printf("plop1\n");
     FILE* myFile = NULL;
     myFile = fopen(FileName, "r");
     tabDoc* L = malloc(sizeof(tabDoc));
@@ -24,12 +23,10 @@ tabDoc* getInfos(char * FileName, int taille){
     {
         //On peut lire et écrire dans le fichier
 
-        printf("plop2\n");
         int fin = getc(myFile);
         while(fin != EOF){
             d->listWord = NULL;
             d->categorie = -1;
-            printf("plop3\n");
 
             fseek(myFile, -1,SEEK_CUR);
             fscanf(myFile,"%i", &(d->categorie));
@@ -54,11 +51,9 @@ tabDoc* getInfos(char * FileName, int taille){
 
             }
             ajouterDoc(L,d->categorie,d->listWord,j);
-            printf("On a ajouté le doc %i",j);
             fin = getc(myFile);
             j++;
         }
-        printf("On a fini de mettre tous les doc");
         fclose(myFile);
     }
     else
@@ -136,7 +131,9 @@ void supprimerMot(Document *d){
 
 void supprimerDoc(tabDoc * L){
  for (int i = 0 ; i < L -> taille ; i ++){
+     supprimerMot(L->tab[i].listWord); 
      free(&(L -> tab[i]));
  }
+free(L);
 
 }

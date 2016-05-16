@@ -5,8 +5,7 @@
 #ifndef TP3_FOUILLE_PARSEUR_H
 #define TP3_FOUILLE_PARSEUR_H
 
-
-#include <jmorecfg.h>
+#include <stdbool.h>
 
 typedef struct Word Word;
 struct Word {
@@ -20,7 +19,7 @@ struct Document{
     int categorie;
     Word *listWord;
     Word *queue;
-    boolean visite;
+    bool visite;
 };
 
 typedef struct {

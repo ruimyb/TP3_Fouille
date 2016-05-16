@@ -6,8 +6,10 @@ int main(){
     //Question parsing
     tabDoc * L = getInfos("test.txt",8);
     afficherAll(L);
+    supprimerDoc(L);
 
     //Question découpage
+
 
     return 0;
 
