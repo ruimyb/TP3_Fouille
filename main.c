@@ -4,7 +4,7 @@
 
 int main(){
     //Question parsing
-    tabDoc * L = getInfos("test.txt",8);
+    tabDoc * L = getInfos("BaseReuters-29",70703);
     printf("Creation oK\n");
     afficherAll(L);
     supprimerDoc(L);
@@ -15,4 +15,4 @@ int main(){
 
     return 0;
 
-} 
+}
