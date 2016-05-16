@@ -26,6 +26,7 @@ tabDoc* getInfos(char * FileName, int taille){
         int fin = getc(myFile);
         while(fin != EOF){
             d->listWord = NULL;
+            d->queue = NULL;
             d->categorie = -1;
 
             fseek(myFile, -1,SEEK_CUR);
@@ -94,15 +95,15 @@ void ajouterDoc(tabDoc * L, int categorie, Word * listWord, int i){
     if ( i < 0 || i >= L -> taille){
         perror("mauvais indice");
     }else {
-        L->tab[i] = *doc;
+        L->tab[i] = doc;
     }
 }
 
 void afficherAll(tabDoc * L){
     printf("La taille du vocabulaire est : %i \n", L->maxIndice);
    for( int i = 0 ; i < L-> taille ; i ++){
-        printf("Affichage du document catégorie %i \n", L -> tab[i].categorie);
-        afficherDoc(&(L -> tab[i]));
+        printf("Affichage du document catégorie %i \n", L -> tab[i]->categorie);
+        afficherDoc((L -> tab[i]));
     }
 }
 void afficherDoc(Document * D){
@@ -126,13 +127,13 @@ void supprimerMot(Document *d){
         free(tmp);
     }
     free(d->listWord);
-    free(d->queue);
 }
 
 void supprimerDoc(tabDoc * L){
  for (int i = 0 ; i < L -> taille ; i ++){
-     supprimerMot(&(L->tab[i]));
+     supprimerMot((L->tab[i]));
+     free(L->tab[i]);
  }
-free(L);
+free(L->tab);
 
 }

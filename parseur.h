@@ -25,7 +25,7 @@ struct Document{
 typedef struct {
     int taille;
     int maxIndice;
-    Document* tab;
+    Document** tab;
 }tabDoc;
 
 void ajouterMot(Document * d, int valeur, int nbr);
