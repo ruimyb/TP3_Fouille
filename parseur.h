@@ -11,7 +11,6 @@ struct Word {
     int value;
     int nbrAppearance;
     Word * suiv;
-    Word *queue;
 };
 
 typedef struct Document Document;
@@ -19,12 +18,13 @@ struct Document{
     int categorie;
     Word *listWord;
     Document * suiv;
-    Document *queue;
+    Word *queue;
 };
 
 typedef struct {
     Document * doc;
     int maxIndice;
+    Document *queue;
 }listDoc;
 
 void ajouterMot(Document * d, int valeur, int nbr);
@@ -33,5 +33,8 @@ listDoc * getInfos(char * FileName);
 void afficherAll(listDoc * L);
 void afficherDoc(Document * D);
 void afficherMot(Word * w);
+void supprimerMot(Document *d);
+void supprimerDoc(listDoc *d);
+
 
 #endif //TP3_FOUILLE_PARSEUR_H

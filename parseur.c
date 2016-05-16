@@ -73,16 +73,16 @@ void ajouterMot(Document * d, int valeur, int nbr){
     //insertion en queue
     Word *dernier = d->listWord;
 
+    mot -> suiv = NULL;
     if (dernier == NULL) {
         d->listWord=mot;
-        mot->suiv = NULL;
+        d -> queue = mot;
+    } else if( dernier == d -> queue){
+       d -> queue = mot;
+        d -> listWord -> suiv = d -> queue;
     } else {
-
-        while (dernier->suiv != NULL) {
-            dernier = dernier->suiv;
-        }
-        dernier->suiv = mot;
-        mot->suiv = NULL;
+        d -> queue -> suiv = mot;
+        d -> queue = mot;
     }
 
 }
@@ -94,17 +94,16 @@ void ajouterDoc(listDoc * L, int categorie, Word * listWord){
 
     //insertion en queue
     Document *last = L->doc;
-
+    doc->suiv = NULL;
     if (last == NULL) {
         L->doc=doc;
-        doc->suiv = NULL;
+        L -> queue = doc;
+    }else if(last == L -> queue){
+        L -> queue = doc;
+        L -> doc -> suiv = L -> queue;
     } else {
-
-        while (last->suiv != NULL) {
-            last = last->suiv;
-        }
-        last->suiv = doc;
-        doc->suiv = NULL;
+        L -> queue -> suiv = doc;
+        L -> queue = doc;
     }
 
 }
@@ -131,5 +130,22 @@ void afficherMot(Word * w){
     printf("%i:%i", w->value,w->nbrAppearance);
 }
 
+void supprimerMot(Document *d){
+    Word * tmp;
+    while (d->listWord != d->queue){
+        tmp = d->listWord;
+        d->listWord = d->listWord->suiv;
+        free(tmp);
+    }
+    free(d->listWord);
+}
 
-
+void supprimerDoc(listDoc * L){
+    Document * tmp;
+    while(L->doc != L->queue){
+        tmp = L->doc;
+        L->doc = L->doc->suiv;
+        free(tmp);
+    }
+    free(L->doc);
+}
