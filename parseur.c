@@ -131,8 +131,8 @@ void supprimerMot(Document *d){
 
 void supprimerDoc(tabDoc * L){
  for (int i = 0 ; i < L -> taille ; i ++){
-     supprimerMot(L->tab[i].listWord); 
-     free(&(L -> tab[i]));
+     supprimerMot(&(L->tab[i].listWord));
+     //free(&(L -> tab[i]));
  }
 free(L);
 
