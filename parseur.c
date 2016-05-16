@@ -5,19 +5,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include "parseur.h"
 
 
 
-listDoc * getInfos(char * FileName){
+tabDoc* getInfos(char * FileName, int taille){
     printf("plop1\n");
     FILE* myFile = NULL;
     myFile = fopen(FileName, "r");
-    listDoc * L = malloc(sizeof(listDoc));
+    tabDoc* L = malloc(sizeof(tabDoc));
     L->maxIndice = -1;
-    L->doc = NULL;
+    L -> taille = taille;
+    L ->tab = malloc(L -> taille * sizeof(Document));
     Document * d = malloc(sizeof(Document));
-
+    int j = 0;
     if (myFile != NULL)
     {
         //On peut lire et écrire dans le fichier
@@ -25,7 +27,6 @@ listDoc * getInfos(char * FileName){
         printf("plop2\n");
         int fin = getc(myFile);
         while(fin != EOF){
-            d->suiv = NULL;
             d->listWord = NULL;
             d->categorie = -1;
             printf("plop3\n");
@@ -52,9 +53,12 @@ listDoc * getInfos(char * FileName){
                 a = getc(myFile);
 
             }
-            ajouterDoc(L,d->categorie,d->listWord);
+            ajouterDoc(L,d->categorie,d->listWord,j);
+            printf("On a ajouté le doc %i",j);
             fin = getc(myFile);
+            j++;
         }
+        printf("On a fini de mettre tous les doc");
         fclose(myFile);
     }
     else
@@ -87,34 +91,23 @@ void ajouterMot(Document * d, int valeur, int nbr){
 
 }
 
-void ajouterDoc(listDoc * L, int categorie, Word * listWord){
+void ajouterDoc(tabDoc * L, int categorie, Word * listWord, int i){
     Document * doc = malloc(sizeof(Document));
     doc->categorie = categorie;
     doc->listWord = listWord;
-
-    //insertion en queue
-    Document *last = L->doc;
-    doc->suiv = NULL;
-    if (last == NULL) {
-        L->doc=doc;
-        L -> queue = doc;
-    }else if(last == L -> queue){
-        L -> queue = doc;
-        L -> doc -> suiv = L -> queue;
-    } else {
-        L -> queue -> suiv = doc;
-        L -> queue = doc;
+    doc -> visite = false;
+    if ( i < 0 || i >= L -> taille){
+        perror("mauvais indice");
+    }else {
+        L->tab[i] = *doc;
     }
-
 }
 
-void afficherAll(listDoc * L){
-    Document * courant = L->doc;
+void afficherAll(tabDoc * L){
     printf("La taille du vocabulaire est : %i \n", L->maxIndice);
-    while(courant != NULL){
-        printf("Affichage du document catégorie %i \n", courant->categorie);
-        afficherDoc(courant);
-        courant = courant->suiv;
+   for( int i = 0 ; i < L-> taille ; i ++){
+        printf("Affichage du document catégorie %i \n", L -> tab[i].categorie);
+        afficherDoc(&(L -> tab[i]));
     }
 }
 void afficherDoc(Document * D){
@@ -138,14 +131,12 @@ void supprimerMot(Document *d){
         free(tmp);
     }
     free(d->listWord);
+    free(d->queue);
 }
 
-void supprimerDoc(listDoc * L){
-    Document * tmp;
-    while(L->doc != L->queue){
-        tmp = L->doc;
-        L->doc = L->doc->suiv;
-        free(tmp);
-    }
-    free(L->doc);
+void supprimerDoc(tabDoc * L){
+ for (int i = 0 ; i < L -> taille ; i ++){
+     free(&(L -> tab[i]));
+ }
+
 }

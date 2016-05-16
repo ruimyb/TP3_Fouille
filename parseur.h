@@ -6,6 +6,8 @@
 #define TP3_FOUILLE_PARSEUR_H
 
 
+#include <jmorecfg.h>
+
 typedef struct Word Word;
 struct Word {
     int value;
@@ -17,24 +19,24 @@ typedef struct Document Document;
 struct Document{
     int categorie;
     Word *listWord;
-    Document * suiv;
     Word *queue;
+    boolean visite;
 };
 
 typedef struct {
-    Document * doc;
+    int taille;
     int maxIndice;
-    Document *queue;
-}listDoc;
+    Document* tab;
+}tabDoc;
 
 void ajouterMot(Document * d, int valeur, int nbr);
-void ajouterDoc(listDoc * L, int categorie, Word * listWord);
-listDoc * getInfos(char * FileName);
-void afficherAll(listDoc * L);
+void ajouterDoc(tabDoc * L, int categorie, Word * listWord, int i);
+tabDoc * getInfos(char * FileName, int i);
+void afficherAll(tabDoc * L);
 void afficherDoc(Document * D);
 void afficherMot(Word * w);
 void supprimerMot(Document *d);
-void supprimerDoc(listDoc *d);
+void supprimerDoc(tabDoc *d);
 
 
 #endif //TP3_FOUILLE_PARSEUR_H
