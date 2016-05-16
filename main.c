@@ -4,7 +4,7 @@
 
 int main(){
 
-    listDoc * L = getInfos("test.txt");
+    tabDoc * L = getInfos("test.txt",8);
     afficherAll(L);
     return 0; 
 } 
