@@ -68,11 +68,11 @@ void ajouterMot(Document * d, int valeur, int nbr){
     Word  * mot = malloc(sizeof(Word));
     mot->value = valeur;
     mot->nbrAppearance = nbr;
+    mot -> suiv = NULL;
 
     //insertion en queue
     Word *dernier = d->listWord;
 
-    mot -> suiv = NULL;
     if (dernier == NULL) {
         d->listWord=mot;
         d -> queue = mot;
