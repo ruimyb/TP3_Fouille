@@ -14,7 +14,7 @@ SRC = $(wildcard $(REP_SRC)/*.c)
 OBJS = $(SRC:$(REP_SRC)/%.c=$(REP_OBJ)/%.o)
 
 $(EXE) : $(OBJS)
-	$(CXX) $(CXXFLAGS) -I $(REP_HEADERS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -I $(REP_HEADERS) -o $@ $^ -lm
 
 $(REP_OBJ) :
 	mkdir -p $@
