@@ -18,6 +18,9 @@ tabDoc* getInfos(char * FileName, int taille){
     L->maxIndice = -1;
     L -> taille = taille;
     L ->tab = malloc(L -> taille * sizeof(Document*));
+    for(int i = 0; i < 29; i++){
+        L->tabCat[i] = 0;
+    }
     Document * d = malloc(sizeof(Document));
     int j = 0;
     if (myFile != NULL)
@@ -32,6 +35,7 @@ tabDoc* getInfos(char * FileName, int taille){
 
             fseek(myFile, -1,SEEK_CUR);
             fscanf(myFile,"%i", &(d->categorie));
+            L->tabCat[d->categorie -1]++;
 
             int a = getc(myFile);
             int b = getc(myFile);
@@ -69,11 +73,11 @@ void ajouterMot(Document * d, int valeur, int nbr){
     Word  * mot = malloc(sizeof(Word));
     mot->value = valeur;
     mot->nbrAppearance = nbr;
+    mot -> suiv = NULL;
 
     //insertion en queue
     Word *dernier = d->listWord;
 
-    mot -> suiv = NULL;
     if (dernier == NULL) {
         d->listWord=mot;
         d -> queue = mot;
@@ -99,8 +103,19 @@ void ajouterDoc(tabDoc * L, int categorie, Word * listWord, int i){
     }
 }
 
+void afficherQ1(tabDoc *L){
+    printf("Réponse à la question 1 : \n");
+    printf("La taille du vocabulaire est : %i \n", L->maxIndice);
+    for(int i = 0; i < 29; i++){
+        printf("Les documents de catégorie %i sont au nombre de : %i \n", i+1,L->tabCat[i]);
+    }
+}
+
 void afficherAll(tabDoc * L){
     printf("La taille du vocabulaire est : %i \n", L->maxIndice);
+    for(int i = 0; i < 29; i++){
+        printf("Les documents de catégorie %i sont au nombre de : %i \n", i+1,L->tabCat[i]);
+    }
    for( int i = 0 ; i < L-> taille ; i ++){
         printf("Affichage du document catégorie %i \n", L -> tab[i]->categorie);
         afficherDoc((L -> tab[i]));
@@ -108,6 +123,7 @@ void afficherAll(tabDoc * L){
 }
 void afficherDoc(Document * D){
     Word * courant = D->listWord;
+
     while(courant != NULL){
         afficherMot(courant);
         printf(" ");

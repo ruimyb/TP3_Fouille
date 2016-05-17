@@ -13,7 +13,10 @@ tabDoc* createTestSet(tabDoc* L) {
 
     test->tab = malloc(18203 * sizeof(Document*));
     test->taille = 18203;
-    test->maxIndice = 0;
+    test->maxIndice = L->maxIndice;
+    for(int i = 0; i < 29; i++){
+        test->tabCat[i] = 0;
+    }
 
     printf("début du remplissage de l'ensemble test\n");
 
@@ -26,6 +29,7 @@ tabDoc* createTestSet(tabDoc* L) {
         if (!(L->tab[j]->visite)) {
             L->tab[j]->visite = true;
             test->tab[i] = L->tab[j];
+            test->tabCat[test->tab[i]->categorie - 1] = test->tabCat[test->tab[i]->categorie - 1] + 1;
             i++;
         }
     }

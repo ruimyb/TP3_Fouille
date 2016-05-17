@@ -25,6 +25,7 @@ struct Document{
 typedef struct {
     int taille;
     int maxIndice;
+    int tabCat[29];
     Document** tab;
 }tabDoc;
 
@@ -35,6 +36,7 @@ void afficherAll(tabDoc * L);
 void afficherDoc(Document * D);
 void afficherMot(Word * w);
 void supprimerMot(Document *d);
+void afficherQ1(tabDoc *L);
 void supprimerDoc(tabDoc *d);
 
 

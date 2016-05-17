@@ -18,7 +18,10 @@ tabDoc* createTrainingSet(tabDoc* L) {
 
     training->tab = malloc(52500 * sizeof(Document*));
     training->taille = 52500;
-    training->maxIndice = 0;
+    training->maxIndice = L->maxIndice;
+    for(int i = 0; i < 29; i++){
+        training->tabCat[i] = 0;
+    }
 
     printf("début du remplissage de l'ensemble entrainement\n");
 
@@ -26,6 +29,7 @@ tabDoc* createTrainingSet(tabDoc* L) {
 
         if (!(L->tab[j]->visite)) {
             training->tab[i] = L->tab[j];
+            training->tabCat[training->tab[i]->categorie - 1] = training->tabCat[training->tab[i]->categorie - 1] + 1;
             i++;
         }
 
