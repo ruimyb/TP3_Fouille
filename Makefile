@@ -6,7 +6,7 @@ REP_OBJ = ./obj_src
 EXE = prog.exe
 
 CXX = gcc
-CXXFLAGS = -Wall -Wextra -g
+CXXFLAGS = -Wall -Wextra -g -std=c99
 
 .PHONY : all clean check
 
