@@ -2,8 +2,7 @@
 // Created by Ruimy Benjamin Mac on 16/05/2016.
 //
 
-#include "multinomial.h"
-#include "parseur.h"
+#include "../headers/multinomial.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

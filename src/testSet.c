@@ -3,8 +3,8 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include "testSet.h"
-#include "parseur.h"
+#include "../headers/testSet.h"
+
 
 tabDoc* createTestSet(tabDoc* L) {
     int i = 0; // indice du tableau de l'ensmeble test

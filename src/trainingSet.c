@@ -4,8 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "trainingSet.h"
-#include "parseur.h"
+#include "../headers/trainingSet.h"
 
 //ON APPELLE CETTE FONCTION APRES AVOIR CRÉER NOTRE FONCTION qui crée l'ensemble test
 

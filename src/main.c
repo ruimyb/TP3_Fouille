@@ -1,7 +1,7 @@
-#include "parseur.h"
-#include "testSet.h"
-#include "trainingSet.h"
-#include "multinomial.h"
+#include "../headers/parseur.h"
+#include "../headers/trainingSet.h"
+#include "../headers/testSet.h"
+#include "../headers/multinomial.h"
 #include <stdio.h>
 
 int main(){
@@ -12,7 +12,7 @@ int main(){
     printf("Creation oK\n");
     //afficherAll(L);
 
-    //afficherQ1(L);
+    afficherQ1(L);
 
     // ======== Question 2 : Découpage de l'ensemble de données ========
     tabDoc* test = createTestSet(L);
