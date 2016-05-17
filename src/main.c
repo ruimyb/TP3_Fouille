@@ -38,16 +38,14 @@ int main(){
 
     int compt = 0;
     double res;
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < training->taille; i++){
         int a = multinomialTest(PC,Pi,training->tab[i]);
-        //printf("La vraie : %i", training->tab[i]->categorie);
-        //printf("Résult : %i", a);
         if (a == training->tab[i]->categorie){
             compt++;
         }
     }
-    res = compt/100;
-    printf("Pourcentage OK : %lf \n", res);
+    res = (double)compt/training->taille;
+    printf("Pourcentage de compatibilité sur l'échantillon test : %lf % \n", res*100);
 
 
     // ======== Question 4 : ========

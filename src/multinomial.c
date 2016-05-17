@@ -19,24 +19,35 @@ void multinomialApprentissage(tabDoc * tabDoc1, double ***PC, double **Pi){
     }
 
     int D[29] = {0};
-
     // N[i] = tabCat[i]
-    for(int i = 0; i < 29; i++){
 
-        (*Pi)[i] = (double)tabDoc1->tabCat[i]/tabDoc1->taille;
+    for(int i = 0; i < 29; i++) {
+        for(int j = 0; j< tabDoc1->maxIndice;j++) {
 
-        for(int j = 0; j < tabDoc1->maxIndice; j++){
             tf[i][j] = 0;
-            Word * Courant = tabDoc1->tab[i]->listWord;
-            while(Courant != NULL){
-                if(Courant->value == j){
-                    tf[i][j] = tf[i][j] + 1;
-                }
-                Courant = Courant->suiv;
-            }
+
+        }
+        (*Pi)[i] = (double) tabDoc1->tabCat[i] / tabDoc1->taille;
+    }
+
+    for(int j = 0; j < tabDoc1->taille; j++){
+
+        Word * Courant = tabDoc1->tab[j]->listWord;
+        while(Courant != NULL){
+            tf[tabDoc1->tab[j]->categorie - 1 ][Courant->value] = tf[tabDoc1->tab[j]->categorie - 1 ][Courant->value] + Courant->nbrAppearance;
+            Courant = Courant->suiv;
+
+        }
+
+    }
+
+    for(int i = 0; i < 29; i++){
+        for(int j = 0; j < tabDoc1->maxIndice;j++){
             D[i] = D[i] + tf[i][j];
         }
+
     }
+
 
     for(int i = 0; i < 29; i++){
         for(int j = 0; j < tabDoc1->maxIndice; j++){
