@@ -39,13 +39,18 @@ tabDoc* getInfos(char * FileName, int taille){
 
             int a = getc(myFile);
             int b = getc(myFile);
+            d->tailleVocab = 0;
+            int value = 0;
+
             while(b != '\n' && a == ' ' && b!= EOF){
                 fseek(myFile, -1,SEEK_CUR);
-                int value = 0;
                 int nbrAppearance = 0;
                 fscanf(myFile,"%i:%i",&value,&nbrAppearance);
-                if(value > L->maxIndice){
-                    L->maxIndice = value;
+                if(value > d->tailleVocab){
+                    d->tailleVocab = value;
+                    if(value < L->maxIndice){
+                        L->maxIndice = value;
+                    }
                 }
 
                 if (a != EOF && a != '\n') {
@@ -55,7 +60,7 @@ tabDoc* getInfos(char * FileName, int taille){
                 a = getc(myFile);
                 b = getc(myFile);
             }
-            ajouterDoc(L,d->categorie,d->listWord,j);
+            ajouterDoc(L,d->categorie,d->listWord, d->tailleVocab,j);
             fin = getc(myFile);
             j++;
         }
@@ -91,11 +96,12 @@ void ajouterMot(Document * d, int valeur, int nbr){
 
 }
 
-void ajouterDoc(tabDoc * L, int categorie, Word * listWord, int i){
+void ajouterDoc(tabDoc * L, int categorie, Word * listWord, int a, int i){
     Document * doc = malloc(sizeof(Document));
     doc->categorie = categorie;
     doc->listWord = listWord;
     doc -> visite = false;
+    doc ->tailleVocab = a;
     if ( i < 0 || i >= L -> taille){
         perror("mauvais indice");
     }else {

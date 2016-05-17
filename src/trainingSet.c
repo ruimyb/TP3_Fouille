@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../headers/trainingSet.h"
+#include "../headers/parseur.h"
 
 //ON APPELLE CETTE FONCTION APRES AVOIR CRÉER NOTRE FONCTION qui crée l'ensemble test
 
@@ -17,7 +18,7 @@ tabDoc* createTrainingSet(tabDoc* L) {
 
     training->tab = malloc(52500 * sizeof(Document*));
     training->taille = 52500;
-    training->maxIndice = L->maxIndice;
+    training->maxIndice = 0;
     for(int i = 0; i < 29; i++){
         training->tabCat[i] = 0;
     }
@@ -28,6 +29,9 @@ tabDoc* createTrainingSet(tabDoc* L) {
 
         if (!(L->tab[j]->visite)) {
             training->tab[i] = L->tab[j];
+            if(training->tab[i]->tailleVocab > training->maxIndice){
+                training->maxIndice = training->tab[i]->tailleVocab;
+            }
             training->tabCat[training->tab[i]->categorie - 1] = training->tabCat[training->tab[i]->categorie - 1] + 1;
             i++;
         }

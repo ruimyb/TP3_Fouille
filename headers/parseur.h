@@ -20,6 +20,7 @@ struct Document{
     Word *listWord;
     Word *queue;
     bool visite;
+    int tailleVocab;
 };
 
 typedef struct {
@@ -30,7 +31,7 @@ typedef struct {
 }tabDoc;
 
 void ajouterMot(Document * d, int valeur, int nbr);
-void ajouterDoc(tabDoc * L, int categorie, Word * listWord, int i);
+void ajouterDoc(tabDoc * L, int categorie, Word * listWord,int j, int i);
 tabDoc * getInfos(char * FileName, int i);
 void afficherAll(tabDoc * L);
 void afficherDoc(Document * D);

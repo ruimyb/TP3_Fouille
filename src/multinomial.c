@@ -18,12 +18,9 @@ void multinomialApprentissage(tabDoc * tabDoc1, double ***PC, double **Pi){
         tf[i] = (int *) malloc(tabDoc1->maxIndice * sizeof(int));
     }
 
-
     int D[29] = {0};
 
     // N[i] = tabCat[i]
-    int maxIndex = 0;
-    int tailleVocab = 0;
     for(int i = 0; i < 29; i++){
 
         (*Pi)[i] = (double)tabDoc1->tabCat[i]/tabDoc1->taille;
@@ -34,18 +31,12 @@ void multinomialApprentissage(tabDoc * tabDoc1, double ***PC, double **Pi){
             while(Courant != NULL){
                 if(Courant->value == j){
                     tf[i][j] = tf[i][j] + 1;
-                    if(Courant->value > tailleVocab){
-                        tailleVocab = Courant->value;
-                    }
-                    if(maxIndex < Courant->value){
-                        maxIndex = Courant->value;
-                    }
                 }
                 Courant = Courant->suiv;
             }
+            D[i] = D[i] + tf[i][j];
         }
     }
-    tabDoc1->maxIndice = maxIndex;
 
     for(int i = 0; i < 29; i++){
         for(int j = 0; j < tabDoc1->maxIndice; j++){
@@ -63,21 +54,18 @@ void multinomialApprentissage(tabDoc * tabDoc1, double ***PC, double **Pi){
 int multinomialTest(double **PC, double *Pi, Document * d){
     double PiF[29] = {0};
     Word * w;
-
     for(int k = 0; k < 29; k++){
         w = d->listWord;
-
         PiF[k] = log(Pi[k]);
-
         while(w != NULL){
             PiF[k] = PiF[k] + (double)w->nbrAppearance * log(PC[k][w->value]);
             w = w->suiv;
         }
-        //  printf("%lf", PiF[k]);
+
     }
     int max = 0;
     for(int i = 0; i < 29; i++){
-        if(PiF[i] > PiF[max]){
+        if(PiF[i] >= PiF[max]){
             max = i;
         }
     }

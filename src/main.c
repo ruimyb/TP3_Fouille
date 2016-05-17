@@ -30,16 +30,23 @@ int main(){
 
     double **PC;
     double *Pi;
+    printf("Test de la taille du voc du doc 1 %i \n", training->tab[0]->tailleVocab);
+
     multinomialApprentissage(test,&PC,&Pi);
+    printf("La taille de l'échantillon d'apprentissage est : %i \n" ,test->maxIndice);
+    printf("La taille de l'échantillon d'training est : %i \n" ,training->maxIndice);
+
     int compt = 0;
     double res;
-    for(int i = 0; i < 52500; i++){
-        int a = multinomialTest(PC,Pi,L->tab[3]);
+    for(int i = 0; i < 10; i++){
+        int a = multinomialTest(PC,Pi,training->tab[i]);
+        //printf("La vraie : %i", training->tab[i]->categorie);
+        //printf("Résult : %i", a);
         if (a == training->tab[i]->categorie){
             compt++;
         }
     }
-    res = compt/52500;
+    res = compt/100;
     printf("Pourcentage OK : %lf \n", res);
 
 
