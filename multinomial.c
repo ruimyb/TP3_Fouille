@@ -74,7 +74,7 @@ int multinomialTest(double **PC, double *Pi, Document * d){
             PiF[k] = PiF[k] + (double)w->nbrAppearance * log(PC[k][w->value]);
             w = w->suiv;
         }
-      //  printf("%lf", PiF[k]);
+        //  printf("%lf", PiF[k]);
     }
     int max = 0;
     for(int i = 0; i < 29; i++){
