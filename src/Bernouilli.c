@@ -3,7 +3,7 @@
 //
 #include <stddef.h>
 #include <math.h>
-#include "Bernouilli.h"
+#include "../headers/Bernouilli.h"
 #include "parseur.h"
 
 //Calcule le nombre de documents de la categorie "categorie"
