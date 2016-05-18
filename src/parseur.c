@@ -9,8 +9,6 @@
 #include "../headers/parseur.h"
 
 
-
-
 tabDoc* getInfos(char * FileName, int taille){
     FILE* myFile = NULL;
     myFile = fopen(FileName, "r");
