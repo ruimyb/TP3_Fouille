@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../headers/testSet.h"
-#include "../headers/parseur.h"
 
 
 tabDoc* createTestSet(tabDoc* L) {

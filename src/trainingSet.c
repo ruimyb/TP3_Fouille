@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../headers/trainingSet.h"
-#include "../headers/parseur.h"
 
 //ON APPELLE CETTE FONCTION APRES AVOIR CRÉER NOTRE FONCTION qui crée l'ensemble test
 

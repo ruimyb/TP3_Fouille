@@ -3,7 +3,6 @@
 //
 
 #include "../headers/multinomial.h"
-#include "parseur.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
