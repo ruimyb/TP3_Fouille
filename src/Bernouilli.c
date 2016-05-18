@@ -4,7 +4,10 @@
 #include <stddef.h>
 #include <math.h>
 #include "../headers/Bernouilli.h"
+<<<<<<< HEAD:src/Bernouilli.c
 #include "parseur.h"
+=======
+>>>>>>> 555d5e806120ffb8de64b7f0a46cfa695cb113f7:src/Bernouilli.c
 
 //Calcule le nombre de documents de la categorie "categorie"
 int nbDocCat(tabDoc *L, int categorie){

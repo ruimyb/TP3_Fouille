@@ -1,7 +1,7 @@
-#include "parseur.h"
-#include "testSet.h"
-#include "trainingSet.h"
-#include "multinomial.h"
+#include "../headers/parseur.h"
+#include "../headers/trainingSet.h"
+#include "../headers/testSet.h"
+#include "../headers/multinomial.h"
 #include <stdio.h>
 
 int main(){
@@ -12,7 +12,7 @@ int main(){
     printf("Creation oK\n");
     //afficherAll(L);
 
-    //afficherQ1(L);
+    afficherQ1(L);
 
     // ======== Question 2 : Découpage de l'ensemble de données ========
     tabDoc* test = createTestSet(L);
@@ -30,17 +30,22 @@ int main(){
 
     double **PC;
     double *Pi;
+    printf("Test de la taille du voc du doc 1 %i \n", training->tab[0]->tailleVocab);
+
     multinomialApprentissage(test,&PC,&Pi);
+    printf("La taille de l'échantillon d'apprentissage est : %i \n" ,test->maxIndice);
+    printf("La taille de l'échantillon d'training est : %i \n" ,training->maxIndice);
+
     int compt = 0;
     double res;
-    for(int i = 0; i < 52500; i++){
-        int a = multinomialTest(PC,Pi,L->tab[3]);
+    for(int i = 0; i < training->taille; i++){
+        int a = multinomialTest(PC,Pi,training->tab[i]);
         if (a == training->tab[i]->categorie){
             compt++;
         }
     }
-    res = compt/52500;
-    printf("Pourcentage OK : %lf \n", res);
+    res = (double)compt/training->taille;
+    printf("Pourcentage de compatibilité sur l'échantillon test : %lf % \n", res*100);
 
 
     // ======== Question 4 : ========

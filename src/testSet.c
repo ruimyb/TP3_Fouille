@@ -3,8 +3,9 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include "testSet.h"
-#include "parseur.h"
+#include "../headers/testSet.h"
+#include "../headers/parseur.h"
+
 
 tabDoc* createTestSet(tabDoc* L) {
     int i = 0; // indice du tableau de l'ensmeble test
@@ -13,7 +14,7 @@ tabDoc* createTestSet(tabDoc* L) {
 
     test->tab = malloc(18203 * sizeof(Document*));
     test->taille = 18203;
-    test->maxIndice = L->maxIndice;
+    test->maxIndice = 0;
     for(int i = 0; i < 29; i++){
         test->tabCat[i] = 0;
     }
@@ -29,6 +30,9 @@ tabDoc* createTestSet(tabDoc* L) {
         if (!(L->tab[j]->visite)) {
             L->tab[j]->visite = true;
             test->tab[i] = L->tab[j];
+            if(test->tab[i]->tailleVocab > test->maxIndice){
+                test->maxIndice = test->tab[i]->tailleVocab;
+            }
             test->tabCat[test->tab[i]->categorie - 1] = test->tabCat[test->tab[i]->categorie - 1] + 1;
             i++;
         }
