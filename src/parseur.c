@@ -45,7 +45,7 @@ tabDoc* getInfos(char * FileName, int taille){
                 fscanf(myFile,"%i:%i",&value,&nbrAppearance);
                 if(value > d->tailleVocab){
                     d->tailleVocab = value;
-                    if(value < L->maxIndice){
+                    if(value > L->maxIndice){
                         L->maxIndice = value;
                     }
                 }

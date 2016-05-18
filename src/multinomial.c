@@ -9,12 +9,9 @@
 
 
 void multinomialApprentissage(tabDoc * tabDoc1, double ***PC, double **Pi){
-    *PC = (double **) malloc(29 * sizeof(double));
-    *Pi = (double *) malloc(29 * sizeof(double));
     int **tf = (int**)malloc(29 * sizeof(int));
 
     for (int i = 0; i < 29; i++) {
-        (*PC)[i] = (double *) malloc(tabDoc1->maxIndice * sizeof(double));
         tf[i] = (int *) malloc(tabDoc1->maxIndice * sizeof(int));
     }
 
@@ -50,8 +47,11 @@ void multinomialApprentissage(tabDoc * tabDoc1, double ***PC, double **Pi){
 
 
     for(int i = 0; i < 29; i++){
+
         for(int j = 0; j < tabDoc1->maxIndice; j++){
+
             (*PC)[i][j] = (double)(tf[i][j] + 1)/((double)(D[i] + tabDoc1->maxIndice));
+
         }
         free(tf[i]);
     }
