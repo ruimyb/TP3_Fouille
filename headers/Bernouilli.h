@@ -7,12 +7,10 @@
 
 #include "parseur.h"
 
-void bernouilliApprentissage(tabDoc* entrainement, double *Pi, double **PC);
+void bernouilliApprentissage(tabDoc* entrainement, double **Pi, double ***PC);
 
 int bernouilliTest(tabDoc *L, double *Pi, double **PC, Document *d);
 
-//Calcule le nombre de documents de la categorie "categorie"
-int nbDocCat(tabDoc *L, int categorie);
 
 //Nous dit si le document doc contient le mot "mot"
 bool contient(Document *doc, int mot);
