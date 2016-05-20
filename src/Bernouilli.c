@@ -3,18 +3,11 @@
 //
 #include <stddef.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "../headers/Bernouilli.h"
+#include "../headers/parseur.h"
 
-//Calcule le nombre de documents de la categorie "categorie"
-int nbDocCat(tabDoc *L, int categorie){
-    int i = 0;
-    for(int j = 0; j < L -> taille; j++ ){
-        if ( L->tab[j]->categorie == categorie){
-            i++;
-        }
-    }
-    return i;
-}
 
 //Nous dit si le document doc contient le mot "mot"
 bool contient(Document *doc, int mot){
@@ -32,7 +25,6 @@ bool contient(Document *doc, int mot){
 //Calcule le nombre de documents de categorie k contenant le mot i
 int nbDocMots(tabDoc *L, int categorie, int mot){
     int i = 0;
-    Word *cour;
     bool present;
     for (int k = 0 ; k < L -> taille; k++){
         if ( (L->tab)[k] ->categorie == categorie ){
@@ -47,7 +39,7 @@ int nbDocMots(tabDoc *L, int categorie, int mot){
 }
 
 //Faire appel a cette fonction avant bernouilliTest
-void bernouilliApprentissage(tabDoc* L, double *Pi, double **PC){
+void bernouilliApprentissage(tabDoc* L, double **Pi, double ***PC){
     //Initialisation
     int V;
     if ( L == NULL){
@@ -55,25 +47,41 @@ void bernouilliApprentissage(tabDoc* L, double *Pi, double **PC){
     }else {
         V = L->maxIndice;
     }
-    int df[29][V];// = {0};
+    //On crée le tableau df
+    int **df = (int**)malloc(29 * sizeof(int*));
+    for (int i = 0; i < 29; i++) {
+        df[i] = (int *) calloc(0,V * sizeof(int));
+    }
+    int a = 0;
     int N[29] = {0};
     int m = 52500;
-
-    // On va d'abord calculer le tableau Pi
+    printf("V = %i\n", V);
+    printf("Tableaux inités\n");
+    printf("On entre dans la boucle\n");
     for (int k = 1; k < 30; k++ ){
-        N[k-1] = nbDocCat(L,k);
-        Pi[k-1] = N[k-1]/m;
+        // On va d'abord calculer le tableau Pi
+        N[k-1] = L -> tabCat[k - 1];
+        //printf("N[%i] OK \n", k - 1);
+        (*Pi)[k-1] = N[k-1]/m;
+        //printf("Pi[%i] OK \n", k - 1);
+        printf("On rentre dans la grosse boucle pour la %ie fois\n",k);
         for (int i = 1; i < V + 1; i++){
-            df[k][i]  = nbDocMots(L,k,i);
+            a =  nbDocMots(L,k,i);
+            printf("a OK\n");
+            printf("k = %i , i = %i\n",k,i);
+            df[k - 1][i - 1]  = a;
+            //On calcule le tableau PC
+        }
+       //  free(df[k - 1]);
+        printf("Fin de du tour %i\n",k);
+    }
+    for (int j = 0; j < 29; ++j) {
+        for ( int i = 0 ; i < V; i++){
+            (*PC)[j][i ] = (df[j][i] + 1) / (N[j] + 2);
         }
     }
-
-    //On calcule le tableau PC
-    for (int k = 0; k < 28; k++){
-        for(int i = 0; i < V; i++){
-            PC[k][i] = (df[k][i] + 1) / (N[k] + 2);
-        }
-    }
+    free(df);
+    printf("free total OK\n");
 }
 
 int bernouilliTest(tabDoc *L, double *Pi, double **PC, Document *d){
@@ -93,6 +101,7 @@ int bernouilliTest(tabDoc *L, double *Pi, double **PC, Document *d){
     }
 
     double max = 0;
+   //On remplit le tableau PiF
     for (int k = 0; k < 29; k ++){
         PiF[k] = log(Pi[k]);
         for ( int i = 0; i < V; i++){
@@ -102,10 +111,14 @@ int bernouilliTest(tabDoc *L, double *Pi, double **PC, Document *d){
                 PiF[k] = PiF[k] + log(1 - PC[k][i]);
             }
         }
+    }
+    //On cherche l'indice max
+    max = PiF[0];
+    for (int k = 0; k < 29; k++){
         if (max < PiF[k]){
             retour = k;
+            max = PiF[k];
         }
     }
-
     return retour;
 }
