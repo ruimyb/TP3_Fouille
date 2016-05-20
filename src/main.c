@@ -2,6 +2,7 @@
 #include "../headers/trainingSet.h"
 #include "../headers/testSet.h"
 #include "../headers/multinomial.h"
+#include "../headers/Bernouilli.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -43,33 +44,58 @@ int main(){
     double *Pi;
     init(&PC,&Pi,L->maxIndice);
 
-    printf("\n\nQuestion 3 :\n");
+   /* printf("\n\nQuestion 3 :\n");
     printf("Estimation des paramètres du modèle Multinomial : ");
     multinomialApprentissage(training,&PC,&Pi);
     printf("Successful \n");
-
+*/
 
 
     // ======== Question 4 : ========
+
     printf("\n\nQuestion 4 : \n");
-    testComparaison(test,PC,Pi);
+    // printf("Initialisation des tableaux Pi et PC OK\n");
+    //On applique Bernouilli Apprentissage
+    //printf("On applique Bernouilli Apprentissage\n");
+    bernouilliApprentissage(training,&Pi,&PC);
+    //printf("Bernouilli Apprentissage sur la base d'entrainement OK\n");
+
+    int compt = 0;
+    double res;
+    int a =0;
+    for (int j = 0; j < test ->taille; ++j) {
+       a =  bernouilliTest(test,Pi,PC,test ->tab[j]);
+        //printf("Bernouilli test nous donne %i \n",a);
+        //printf("Sa vrai catégorie est %i \n",test->tab[j]->categorie);
+        if (a == test->tab[j]->categorie){
+            compt++;
+            //printf("Bernouilli test sur le %ie doc de test  Le resultat est BON\n",j);
+        }else {
+            //printf("Bernouilli test sur le %ie doc de test, le resultat est MAUVAIS\n", j);
+        }//printf("\n");
+    }
+    printf("Bernouilli test sur la base de test OK\n");
+    res = (double)compt/test->taille;
+    printf("Pourcentage de compatibilité sur l'échantillon test : %lf \n", res*100);
+
+
     // ======== Question 5 : Multinomial : ========
 
     printf("\n\nQuestion 5 en cours pour le modèle Multinomial : \n \n");
 
-    double res = 0;
-    int nbr = 20;
-    for(int i = 0 ; i < nbr; i++){
-        printf("Echantillon %i en cours de test : \n\n", i+1);
-        initL(L);
-        test = createTestSet(L);
-        training = createTrainingSet(L);
-        multinomialApprentissage(training,&PC,&Pi);
-        res = res + testComparaison(test,PC,Pi);
+    /*  double res = 0;
+      int nbr = 20;
+      for(int i = 0 ; i < nbr; i++){
+          printf("Echantillon %i en cours de test : \n\n", i+1);
+          initL(L);
+          test = createTestSet(L);
+          training = createTrainingSet(L);
+          multinomialApprentissage(training,&PC,&Pi);
+          res = res + testComparaison(test,PC,Pi);
 
-    }
+      }*/
 
-    printf("\nNous obtenons donc un pourcentage de compatibilité en ayant effectué %i tests de : %lf \n",nbr, res/nbr);
+    //printf("\nNous obtenons donc un pourcentage de compatibilité en ayant effectué %i tests de : %lf \n",nbr, res/nbr);
 
 
 
