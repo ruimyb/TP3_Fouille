@@ -43,14 +43,15 @@ int main(){
     double *Pi;
     init(&PC,&Pi,L->maxIndice);
 
-    printf("\n\nQuestion 3 pour l'estimation des paramètres du modèle Multinomial : ");
+    printf("\n\nQuestion 3 :\n");
+    printf("Estimation des paramètres du modèle Multinomial : ");
     multinomialApprentissage(training,&PC,&Pi);
     printf("Successful \n");
 
 
 
     // ======== Question 4 : ========
-    printf("\n\nQuestion 4 : ");
+    printf("\n\nQuestion 4 : \n");
     testComparaison(test,PC,Pi);
     // ======== Question 5 : Multinomial : ========
 
