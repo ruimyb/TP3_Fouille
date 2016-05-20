@@ -22,7 +22,6 @@ tabDoc* createTrainingSet(tabDoc* L) {
         training->tabCat[i] = 0;
     }
 
-    printf("début du remplissage de l'ensemble entrainement\n");
 
     while (i < 52500) {
 
