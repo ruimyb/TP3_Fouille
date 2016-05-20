@@ -1,14 +1,13 @@
 #include "../headers/parseur.h"
 #include "../headers/trainingSet.h"
 #include "../headers/testSet.h"
-#include "../headers/Bernouilli.h"
 #include "../headers/multinomial.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 void initL(tabDoc * L);
 void liberer(double ***PC, double **Pi);
-int testComparaison(tabDoc * test, double **PC, double *Pi);
+double testComparaison(tabDoc * test, double **PC, double *Pi);
 void init(double ***PC,double **Pi,int maxIndice);
 
 int main(){
@@ -20,74 +19,66 @@ int main(){
     printf("Creation oK\n");
     //afficherAll(L);
 
-    //afficherQ1(L);
+    afficherQ1(L);
 
     // ======== Question 2 : Découpage de l'ensemble de données ========
+    printf("\n\nQuestion 2 : \n");
+    printf("Création de l'échantillon de test : ");
     tabDoc* test = createTestSet(L);
+    printf("Successful\n");
     //afficherAll(test);
-
+    printf("Création de l'échantillon d'apprentissage : ");
     tabDoc* training = createTrainingSet(L);
+    printf("Successful \n");
 
     //afficherAll(training);
 
 
     // ======== Question 3a : estimation des paramètres du modèle de Bernoulli ========
 
-    //ON initialise
-    double **PC;
-    double *Pi;
-    printf("MaxIndice vaut %i", L -> maxIndice);
-    init(&PC,&Pi,L->maxIndice);
-    printf("Initialisation des tableaux Pi et PC OK\n");
-    //On applique Bernouilli Apprentissage
-    printf("On applique Bernouilli Apprentissage\n");
-    bernouilliApprentissage(training,&Pi,&PC);
-    printf("Bernouilli Apprentissage sur la base d'entrainement OK\n");
-
-    int compt = 0;
-    double res;
-    int a =0;
-    for (int j = 0; j < test ->taille; ++j) {
-       a =  bernouilliTest(test,Pi,PC,test ->tab[j]);
-        if (a == test->tab[j]->categorie){
-            compt++;
-        }
-    }
-    printf("Bernouilli test sur la base de test OK\n");
-    res = (double)compt/test->taille;
-    printf("Pourcentage de compatibilité sur l'échantillon test : %lf \n", res*100);
-
-    liberer(&PC,&Pi);
 
     // ======== Question 3b : estimation des paramètres du modèle de Multinomial ========
 
-    /*double **PC;
+    double **PC;
     double *Pi;
-    printf("Test de la taille du voc du doc 1 %i \n", test->tab[0]->tailleVocab);
-
-
-
     init(&PC,&Pi,L->maxIndice);
 
+    printf("\n\nQuestion 3 :\n");
+    printf("Estimation des paramètres du modèle Multinomial : ");
     multinomialApprentissage(training,&PC,&Pi);
-    printf("La taille de l'échantillon test est : %i \n" ,test->maxIndice);
-    printf("La taille de l'échantillon training est : %i \n" ,training->maxIndice);
-    testComparaison(test,PC,Pi);
-    liberer(&PC,&Pi);*/
+    printf("Successful \n");
+
 
 
     // ======== Question 4 : ========
+    printf("\n\nQuestion 4 : \n");
+    testComparaison(test,PC,Pi);
+    // ======== Question 5 : Multinomial : ========
 
-    // ======== Question 5 : ========
+    printf("\n\nQuestion 5 en cours pour le modèle Multinomial : \n \n");
+
+    double res = 0;
+    int nbr = 20;
+    for(int i = 0 ; i < nbr; i++){
+        printf("Echantillon %i en cours de test : \n\n", i+1);
+        initL(L);
+        test = createTestSet(L);
+        training = createTrainingSet(L);
+        multinomialApprentissage(training,&PC,&Pi);
+        res = res + testComparaison(test,PC,Pi);
+
+    }
+
+    printf("\nNous obtenons donc un pourcentage de compatibilité en ayant effectué %i tests de : %lf \n",nbr, res/nbr);
 
 
 
 
 
     //Liberation
-    supprimerDoc(training);
-    supprimerDoc(test);
+    liberer(&PC,&Pi);
     supprimerDoc(L);
+
     printf("Suppression ok\n");
 
 
@@ -101,7 +92,7 @@ void initL(tabDoc * L){
     }
 }
 
-int testComparaison(tabDoc * test, double **PC, double *Pi){
+double testComparaison(tabDoc * test, double **PC, double *Pi){
     int compt = 0;
     double res;
     for(int i = 0; i < test->taille; i++){
@@ -111,14 +102,16 @@ int testComparaison(tabDoc * test, double **PC, double *Pi){
         }
     }
     res = (double)compt/test->taille;
-    printf("Pourcentage de compatibilité sur l'échantillon test : %lf \n", res*100);
+    printf("Taux de bonne classification pour l'échantillon test : %lf \n", res*100);
+
+    return res;
 }
 
 void init(double ***PC,double **Pi,int maxIndice){
     *PC = (double **) malloc(29 * sizeof(double*));
-    *Pi = (double *) malloc(29 * sizeof(double));
+    *Pi = malloc(29 * sizeof(double));
     for (int i = 0; i < 29; i++) {
-        (*PC)[i] = (double *) calloc(0,maxIndice * sizeof(double));
+        (*PC)[i] = (double *) malloc(maxIndice * sizeof(double));
     }
 }
 

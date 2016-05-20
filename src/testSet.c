@@ -18,7 +18,6 @@ tabDoc* createTestSet(tabDoc* L) {
         test->tabCat[i] = 0;
     }
 
-    printf("début du remplissage de l'ensemble test\n");
 
     srand(time(NULL));
 
