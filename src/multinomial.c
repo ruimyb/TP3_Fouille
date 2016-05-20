@@ -31,7 +31,8 @@ void multinomialApprentissage(tabDoc * tabDoc1, double ***PC, double **Pi){
 
         Word * Courant = tabDoc1->tab[j]->listWord;
         while(Courant != NULL){
-            tf[tabDoc1->tab[j]->categorie - 1 ][Courant->value] = tf[tabDoc1->tab[j]->categorie - 1 ][Courant->value] + Courant->nbrAppearance;
+
+            tf[tabDoc1->tab[j]->categorie - 1 ][Courant->value - 1] = tf[tabDoc1->tab[j]->categorie - 1 ][Courant->value - 1] + Courant->nbrAppearance;
             Courant = Courant->suiv;
 
         }
@@ -69,7 +70,7 @@ int multinomialTest(double **PC, double *Pi, Document * d){
         w = d->listWord;
         PiF[k] = log(Pi[k]);
         while(w != NULL){
-            PiF[k] = PiF[k] + (double)w->nbrAppearance * log(PC[k][w->value]);
+            PiF[k] = PiF[k] + (double)w->nbrAppearance * log(PC[k][w->value - 1]);
             w = w->suiv;
         }
 
