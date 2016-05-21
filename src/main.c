@@ -5,17 +5,18 @@
 #include "../headers/Bernouilli.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "math.h"
 
 void initL(tabDoc * L);
 void liberer(double ***PC, double **Pi);
-double testComparaison(tabDoc * test, double **PC, double *Pi);
+double testComparaisonMultinomial(tabDoc * test, double **PC, double *Pi);
+double testComparaisonBernouilli(tabDoc * test, double **PC, double *Pi, double a);
 void init(double ***PC,double **Pi,int maxIndice);
 
 int main(){
 
 
     // ======== Question 1 : Parsing des data ========
-    //tabDoc * L = getInfos("test.txt",8);
     tabDoc * L = getInfos("./tests/BaseReuters-29", 70703);
     printf("Creation oK\n");
     //afficherAll(L);
@@ -34,75 +35,95 @@ int main(){
 
     //afficherAll(training);
 
+    double **PC;
+    double *Pi;
+    double **PCBernouilli;
+    double *PiBernouilli;
+    init(&PC,&Pi,L->maxIndice);
+    init(&PCBernouilli,&PiBernouilli,L->maxIndice);
+
+    // ======== Question 3 ========
 
     // ======== Question 3a : estimation des paramètres du modèle de Bernoulli ========
 
+    printf("\n\nQuestion 3b :\n");
+    printf("Estimation des paramètres du modèle de Bernouilli : ");
+    bernouilliApprentissage(training,&PiBernouilli,&PCBernouilli);
+    printf("Successful \n");
 
     // ======== Question 3b : estimation des paramètres du modèle de Multinomial ========
 
-    double **PC;
-    double *Pi;
-    init(&PC,&Pi,L->maxIndice);
 
-   /* printf("\n\nQuestion 3 :\n");
+
+    printf("\n\nQuestion 3b :\n");
     printf("Estimation des paramètres du modèle Multinomial : ");
     multinomialApprentissage(training,&PC,&Pi);
     printf("Successful \n");
-*/
+
 
 
     // ======== Question 4 : ========
 
     printf("\n\nQuestion 4 : \n");
-    // printf("Initialisation des tableaux Pi et PC OK\n");
-    //On applique Bernouilli Apprentissage
-    //printf("On applique Bernouilli Apprentissage\n");
-    bernouilliApprentissage(training,&Pi,&PC);
-    //printf("Bernouilli Apprentissage sur la base d'entrainement OK\n");
+    testComparaisonMultinomial(test,PC,Pi);
+    testComparaisonBernouilli(test, PCBernouilli, PiBernouilli,0.01);
 
-    int compt = 0;
-    double res;
-    int a =0;
-    for (int j = 0; j < test ->taille; ++j) {
-       a =  bernouilliTest(test,Pi,PC,test ->tab[j]);
-        //printf("Bernouilli test nous donne %i \n",a);
-        //printf("Sa vrai catégorie est %i \n",test->tab[j]->categorie);
-        if (a == test->tab[j]->categorie){
-            compt++;
-            //printf("Bernouilli test sur le %ie doc de test  Le resultat est BON\n",j);
-        }else {
-            //printf("Bernouilli test sur le %ie doc de test, le resultat est MAUVAIS\n", j);
-        }//printf("\n");
-    }
-    printf("Bernouilli test sur la base de test OK\n");
-    res = (double)compt/test->taille;
-    printf("Pourcentage de compatibilité sur l'échantillon test : %lf \n", res*100);
+
 
 
     // ======== Question 5 : Multinomial : ========
 
     printf("\n\nQuestion 5 en cours pour le modèle Multinomial : \n \n");
 
-    /*  double res = 0;
-      int nbr = 20;
-      for(int i = 0 ; i < nbr; i++){
-          printf("Echantillon %i en cours de test : \n\n", i+1);
-          initL(L);
-          test = createTestSet(L);
-          training = createTrainingSet(L);
-          multinomialApprentissage(training,&PC,&Pi);
-          res = res + testComparaison(test,PC,Pi);
+    double res = 0;
+    double var = 0;
+    int nbr = 20;
 
-      }*/
+    for(int i = 0 ; i < nbr; i++){
+        printf("Echantillon %i en cours de test : \n\n", i+1);
+        initL(L);
+        test = createTestSet(L);
+        training = createTrainingSet(L);
+        multinomialApprentissage(training,&PC,&Pi);
+        res = res + testComparaisonMultinomial(test,PC,Pi);
+        var = var + res*res;
 
-    //printf("\nNous obtenons donc un pourcentage de compatibilité en ayant effectué %i tests de : %lf \n",nbr, res/nbr);
+    }
+    res = res/nbr;
+    var = var/nbr - res*res;
+    printf("\nNous obtenons donc un pourcentage de compatibilité avec le modèle multinomial en ayant effectué %i tests de : %lf %%\n",nbr, res * 100);
+    printf("L'écart type de cette série d'échantillon est de : %lf \n", sqrt(var));
 
+    // ======== Question 5 : Bernouilli : ========
 
-
+    printf("Tester le modèle de Bernouilli 20 fois est très long, si vous désirez le faire cela est possible, "
+                   "en revanche,  tester la totalité de l'échantillon test prend 20minutes, celà prendrait donc 7h"
+                   " d'effectuer le test complet \n");
+    int a;
+    printf("Tapez 1 si vous souhaitez effectuer le test 20 fois : ");
+    scanf("%i",&a);
+    res = 0;
+    var = 0;
+    if(a == 1){
+        for(int i = 0 ; i < nbr; i++){
+            printf("Echantillon %i en cours de test : \n\n", i+1);
+            initL(L);
+            test = createTestSet(L);
+            training = createTrainingSet(L);
+            bernouilliApprentissage(training,&PiBernouilli,&PCBernouilli);
+            res = res + testComparaisonBernouilli(test, PCBernouilli, PiBernouilli,0.01);
+            var = var + res*res;
+        }
+    }
+    res = res/nbr;
+    var = sqrt(var/nbr - res*res);
+    printf("\nNous obtenons donc un pourcentage de compatibilité avec le modèle de Bernouilli en ayant effectué %i tests de : %lf %%\n",nbr, res * 100);
+    printf("L'écart type de cette série d'échantillon est de : %lf \n", sqrt(var));
 
 
     //Liberation
     liberer(&PC,&Pi);
+    liberer(&PCBernouilli,&PiBernouilli);
     supprimerDoc(L);
 
     printf("Suppression ok\n");
@@ -118,7 +139,7 @@ void initL(tabDoc * L){
     }
 }
 
-double testComparaison(tabDoc * test, double **PC, double *Pi){
+double testComparaisonMultinomial(tabDoc * test, double **PC, double *Pi){
     int compt = 0;
     double res;
     for(int i = 0; i < test->taille; i++){
@@ -128,7 +149,24 @@ double testComparaison(tabDoc * test, double **PC, double *Pi){
         }
     }
     res = (double)compt/test->taille;
-    printf("Taux de bonne classification pour l'échantillon test : %lf \n", res*100);
+    printf("Taux de bonne classification pour l'échantillon test avec le modèle Multinomial : %lf %% \n", res*100);
+
+    return res;
+}
+
+
+double testComparaisonBernouilli(tabDoc * test, double **PC, double *Pi,double rate){
+    int compt = 0;
+    double res;
+    printf("Wait ! \n");
+    for(int i = 0; i < test->taille*rate; i++){
+        int a = bernouilliTest(test,Pi,PC,test->tab[i]);
+        if (a == test->tab[i]->categorie){
+            compt++;
+        }
+    }
+    res = (double)compt/(test->taille*rate);
+    printf("Taux de bonne classification pour l'échantillon test avec le modèle de Bernouilli : %lf %% \n", res*100);
 
     return res;
 }
