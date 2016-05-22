@@ -103,10 +103,21 @@ int main(){
                    "en revanche,  tester la totalité de l'échantillon test prend 20minutes, celà prendrait donc 7h"
                    " d'effectuer le test complet \n\n");
     printf("Entrez le pourcentage de l'échantillon que vous souhaitez tester : ");
-    double rate;
-    scanf("%lf", &rate);
+    double rate = 150;
+    while(rate > 100 || rate < 0){
+        scanf("%lf", &rate);
+        if(rate > 100 || rate < 0){
+            printf("\nLa valeur que vous devez rentrer doit être comprise entre 0 et 100 : ");
+        }
+    }
     printf("Tapez le nombre de fois que vous souhaitez effectuer le test ");
-    scanf("%i",&nbr);
+    nbr = 30; 
+    while(nbr > 20 || nbr < 0) {
+        scanf("%i", &nbr);
+        if(nbr > 20 || nbr < 0){
+            printf("\nLa valeur que vous devez rentrer doit être comprise entre 0 et 20 : ");
+        }
+    }
     res = 0;
     var = 0;
     for(int i = 0 ; i < nbr; i++){

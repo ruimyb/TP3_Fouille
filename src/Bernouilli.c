@@ -3,30 +3,8 @@
 //
 #include <stddef.h>
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include "../headers/Bernouilli.h"
-#include "../headers/parseur.h"
-
-//On crée une structure pour le parcours des mots
-typedef struct TabCatDoc TabCatDoc;
-struct TabCatDoc {
-    int taille;
-    Document ** tab;
-};
-
-
-//Calcule le nombre de documents de catégorie K
-int nbDocCat(tabDoc *L, int k){
-    int retour = 0;
-    for ( int i = 0; i < L->taille;i++){
-        if (L->tab[i]->categorie == k){
-            retour ++;
-        }
-    }
-    return retour;
-}
-
 
 
 //Faire appel a cette fonction avant bernouilliTest
