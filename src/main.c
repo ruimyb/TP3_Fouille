@@ -78,47 +78,51 @@ int main(){
     double res = 0;
     double var = 0;
     int nbr = 20;
+    double tmp;
 
     for(int i = 0 ; i < nbr; i++){
+
         printf("Echantillon %i en cours de test : \n\n", i+1);
         initL(L);
         test = createTestSet(L);
         training = createTrainingSet(L);
         multinomialApprentissage(training,&PC,&Pi);
-        res = res + testComparaisonMultinomial(test,PC,Pi);
-        var = var + res*res;
+        tmp = testComparaisonMultinomial(test,PC,Pi);
+        res = res + tmp;
+        var = var + tmp * tmp;
 
     }
     res = res/nbr;
-    var = var/nbr - res*res;
-    printf("\nNous obtenons donc un pourcentage de compatibilité avec le modèle multinomial en ayant effectué %i tests de : %lf %%\n",nbr, res * 100);
-    printf("L'écart type de cette série d'échantillon est de : %lf \n", sqrt(var));
+    var = sqrt(var/nbr - res*res);
+    printf("\nNous obtenons donc un pourcentage de compatibilité avec le modèle multinomial en ayant effectué %i tests de : %lf %%\n\n",nbr, res * 100);
+    printf("L'écart type de cette série est de : %lf \n\n", var);
 
     // ======== Question 5 : Bernouilli : ========
 
     printf("Tester le modèle de Bernouilli 20 fois est très long, si vous désirez le faire cela est possible, "
                    "en revanche,  tester la totalité de l'échantillon test prend 20minutes, celà prendrait donc 7h"
-                   " d'effectuer le test complet \n");
-    int a;
-    printf("Tapez 1 si vous souhaitez effectuer le test 20 fois : ");
-    scanf("%i",&a);
+                   " d'effectuer le test complet \n\n");
+    printf("Entrez le pourcentage de l'échantillon que vous souhaitez tester : ");
+    double rate;
+    scanf("%lf", &rate);
+    printf("Tapez le nombre de fois que vous souhaitez effectuer le test ");
+    scanf("%i",&nbr);
     res = 0;
     var = 0;
-    if(a == 1){
-        for(int i = 0 ; i < nbr; i++){
-            printf("Echantillon %i en cours de test : \n\n", i+1);
-            initL(L);
-            test = createTestSet(L);
-            training = createTrainingSet(L);
-            bernouilliApprentissage(training,&PiBernouilli,&PCBernouilli);
-            res = res + testComparaisonBernouilli(test, PCBernouilli, PiBernouilli,0.01);
-            var = var + res*res;
-        }
+    for(int i = 0 ; i < nbr; i++){
+        printf("Echantillon %i en cours de test : \n\n", i+1);
+        initL(L);
+        test = createTestSet(L);
+        training = createTrainingSet(L);
+        bernouilliApprentissage(training,&PiBernouilli,&PCBernouilli);
+        tmp = testComparaisonBernouilli(test, PCBernouilli, PiBernouilli,rate/100);
+        res = res + tmp;
+        var = var + tmp * tmp;
     }
     res = res/nbr;
     var = sqrt(var/nbr - res*res);
     printf("\nNous obtenons donc un pourcentage de compatibilité avec le modèle de Bernouilli en ayant effectué %i tests de : %lf %%\n",nbr, res * 100);
-    printf("L'écart type de cette série d'échantillon est de : %lf \n", sqrt(var));
+    printf("L'écart type de cette série est de : %lf \n\n", var);
 
 
     //Liberation
@@ -126,7 +130,7 @@ int main(){
     liberer(&PCBernouilli,&PiBernouilli);
     supprimerDoc(L);
 
-    printf("Suppression ok\n");
+    printf("\n\nSuppression ok\n");
 
 
     return 0;
@@ -166,7 +170,7 @@ double testComparaisonBernouilli(tabDoc * test, double **PC, double *Pi,double r
         }
     }
     res = (double)compt/(test->taille*rate);
-    printf("Taux de bonne classification pour l'échantillon test avec le modèle de Bernouilli : %lf %% \n", res*100);
+    printf("Taux de bonne classification pour l'échantillon test avec le modèle de Bernouilli : %lf %% (seulement %lf %% de l'échantillon test utilisé) \n", res*100, rate*100);
 
     return res;
 }
